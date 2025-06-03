@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>My Product Store</title>
+  <link href="styles.css" rel="stylesheet" />
+</head>
+<body>
+  <header>
+    <h1>My Product Store</h1>
+    <nav>
+      <button id="nav-home" class="nav-btn active">Home</button>
+      <button id="nav-about" class="nav-btn">About</button>
+    </nav>
+    <input type="text" id="searchInput" placeholder="Search for products..." />
+  </header>
+
+  <section id="playlists">
+    <button class="playlist-btn" data-category="electronics">Electronics</button>
+    <button class="playlist-btn" data-category="cosmetics">Cosmetics</button>
+    <button class="playlist-btn" data-category="newwatch">New Watch</button>
+  </section>
+
+  <main id="product-list"></main>
+
+  <section id="about-section" style="display:none; padding: 20px;">
+    <h2>About Us</h2>
+    <p>Welcome to My Product Store! We offer a wide variety of products to suit your needs. Whether you're looking for the latest electronics, trendy cosmetics, or stylish watches, we've got you covered.</p>
+  </section>
+
+  <footer>
+    <p>&copy; 2025 My Product Store</p>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
