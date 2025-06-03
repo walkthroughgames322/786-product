@@ -1,38 +1,77 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>My Product Store</title>
-  <link href="styles.css" rel="stylesheet" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>786 Products - Premium Collection</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
-  <header>
-    <h1>My Product Store</h1>
-    <nav>
-      <button id="nav-home" class="nav-btn active">Home</button>
-      <button id="nav-about" class="nav-btn">About</button>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="container">
+            <a href="index.html" class="logo">786 Products</a>
+            <div class="nav-links">
+                <a href="index.html" class="active"><i class="fas fa-home"></i> Home</a>
+                <a href="about.html"><i class="fas fa-info-circle"></i> About</a>
+            </div>
+        </div>
     </nav>
-    <input type="text" id="searchInput" placeholder="Search for products..." />
-  </header>
 
-  <section id="playlists">
-    <button class="playlist-btn" data-category="electronics">Electronics</button>
-    <button class="playlist-btn" data-category="cosmetics">Cosmetics</button>
-    <button class="playlist-btn" data-category="newwatch">New Watch</button>
-  </section>
+    <!-- Hero Section -->
+    <header class="hero">
+        <div class="container">
+            <h1>Discover Our Premium Collection</h1>
+            <div class="search-box">
+                <input type="text" id="globalSearch" placeholder="Search products...">
+                <button id="searchBtn"><i class="fas fa-search"></i></button>
+            </div>
+        </div>
+    </header>
 
-  <main id="product-list"></main>
+    <!-- Featured Playlists -->
+    <section class="featured-playlists">
+        <div class="container">
+            <h2>Featured Collections</h2>
+            <div class="playlist-grid" id="featuredPlaylists">
+                <!-- Featured playlists will load here -->
+            </div>
+        </div>
+    </section>
 
-  <section id="about-section" style="display:none; padding: 20px;">
-    <h2>About Us</h2>
-    <p>Welcome to My Product Store! We offer a wide variety of products to suit your needs. Whether you're looking for the latest electronics, trendy cosmetics, or stylish watches, we've got you covered.</p>
-  </section>
+    <!-- All Playlists -->
+    <section class="all-playlists">
+        <div class="container">
+            <h2>All Collections</h2>
+            <div class="playlist-grid" id="allPlaylists">
+                <!-- All playlists will load here -->
+            </div>
+        </div>
+    </section>
 
-  <footer>
-    <p>&copy; 2025 My Product Store</p>
-  </footer>
+    <!-- Products Modal -->
+    <div class="modal" id="productsModal">
+        <div class="modal-content">
+            <span class="close-modal">&times;</span>
+            <h2 id="modalTitle">Collection Products</h2>
+            <div class="search-box modal-search">
+                <input type="text" id="modalSearch" placeholder="Search in this collection...">
+                <button id="modalSearchBtn"><i class="fas fa-search"></i></button>
+            </div>
+            <div class="products-grid" id="productsGrid">
+                <!-- Products will load here -->
+            </div>
+        </div>
+    </div>
 
-  <script src="script.js"></script>
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2023 786 Products. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script src="js/script.js"></script>
 </body>
 </html>
