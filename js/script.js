@@ -1,5 +1,5 @@
 // Replace with your actual Google Sheets URL
-const SHEET_URL = 'https://docs.google.com/spreadsheets/d/e/YOUR_SHEET_ID/pub?output=csv';
+const SHEET_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRGwweNAf5B5pnt3zjcUB3X2gaKjY6PAmh4SUXiQef_jiZ9cabx6senq_LEw7G36THrIbJVgj6JRbf4/pub?gid=0&single=true&output=csv';
 
 // Add this function to handle CSV parsing correctly
 function parseCSV(csv) {
