@@ -1,38 +1,47 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>My Product Store</title>
-  <link href="styles.css" rel="stylesheet" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About - 786 Products</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
-  <header>
-    <h1>My Product Store</h1>
-    <nav>
-      <button id="nav-home" class="nav-btn active">Home</button>
-      <button id="nav-about" class="nav-btn">About</button>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="container">
+            <a href="index.html" class="logo">786 Products</a>
+            <div class="nav-links">
+                <a href="index.html"><i class="fas fa-home"></i> Home</a>
+                <a href="about.html" class="active"><i class="fas fa-info-circle"></i> About</a>
+            </div>
+        </div>
     </nav>
-    <input type="text" id="searchInput" placeholder="Search for products..." />
-  </header>
 
-  <section id="playlists">
-    <button class="playlist-btn" data-category="electronics">Electronics</button>
-    <button class="playlist-btn" data-category="cosmetics">Cosmetics</button>
-    <button class="playlist-btn" data-category="newwatch">New Watch</button>
-  </section>
+    <!-- About Section -->
+    <section class="about-section">
+        <div class="container">
+            <div class="about-content">
+                <h2>About 786 Products</h2>
+                <p>Welcome to 786 Products, your premier destination for high-quality collections and unique finds. We curate the best products to meet your needs and exceed your expectations.</p>
+                
+                <p>Our mission is to provide customers with carefully selected items that combine quality, functionality, and value. Each product in our collection is chosen with care to ensure it meets our high standards.</p>
+                
+                <p>At 786 Products, we believe in building lasting relationships with our customers through exceptional service and outstanding products. Whether you're looking for everyday essentials or special items, we've got you covered.</p>
+                
+                <p>Thank you for choosing 786 Products. We appreciate your trust and look forward to serving you.</p>
+            </div>
+        </div>
+    </section>
 
-  <main id="product-list"></main>
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2023 786 Products. All rights reserved.</p>
+        </div>
+    </footer>
 
-  <section id="about-section" style="display:none; padding: 20px;">
-    <h2>About Us</h2>
-    <p>Welcome to My Product Store! We offer a wide variety of products to suit your needs. Whether you're looking for the latest electronics, trendy cosmetics, or stylish watches, we've got you covered.</p>
-  </section>
-
-  <footer>
-    <p>&copy; 2025 My Product Store</p>
-  </footer>
-
-  <script src="script.js"></script>
+    <script src="js/script.js"></script>
 </body>
 </html>
