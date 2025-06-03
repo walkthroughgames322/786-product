@@ -1,6 +1,27 @@
-// Google Sheets URL (replace with your published sheet URL)
-const SHEET_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRGwweNAf5B5pnt3zjcUB3X2gaKjY6PAmh4SUXiQef_jiZ9cabx6senq_LEw7G36THrIbJVgj6JRbf4/pub?gid=0&single=true&output=csv';
+// Replace with your actual Google Sheets URL
+const SHEET_URL = 'https://docs.google.com/spreadsheets/d/e/YOUR_SHEET_ID/pub?output=csv';
 
+// Add this function to handle CSV parsing correctly
+function parseCSV(csv) {
+    const lines = csv.split('\n');
+    const headers = lines[0].split(',').map(header => header.trim());
+    
+    allProducts = [];
+    
+    for (let i = 1; i < lines.length; i++) {
+        // Improved CSV parsing to handle commas in values
+        const values = lines[i].match(/(".*?"|[^",\s]+)(?=\s*,|\s*$)/g) || [];
+        if (values.length === headers.length) {
+            const product = {};
+            for (let j = 0; j < headers.length; j++) {
+                product[headers[j]] = values[j].trim().replace(/^"|"$/g, '');
+            }
+            allProducts.push(product);
+        }
+    }
+    
+    displayPlaylists();
+}
 // DOM Elements
 const featuredPlaylistsEl = document.getElementById('featuredPlaylists');
 const allPlaylistsEl = document.getElementById('allPlaylists');
