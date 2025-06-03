@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Product Showcase with Playlists</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <!-- Admin Floating Button -->
+    <div id="adminButton" class="admin-floating-btn">
+        <i class="fas fa-plus"></i>
+    </div>
+
+    <!-- Admin Modals -->
+    <div id="adminModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Add New Product</h2>
+            <form id="productForm">
+                <div class="form-group">
+                    <label for="productPlaylist">Playlist:</label>
+                    <select id="productPlaylist" required>
+                        <option value="">Select a playlist</option>
+                        <!-- Playlists will be loaded here -->
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="productImage">Product Photo:</label>
+                    <input type="file" id="productImage" accept="image/*" required>
+                    <div class="image-preview" id="imagePreview"></div>
+                </div>
+                <div class="form-group">
+                    <label for="productName">Product Name:</label>
+                    <input type="text" id="productName" placeholder="Enter product name" required>
+                </div>
+                <div class="form-group">
+                    <label for="productLink">Product Link:</label>
+                    <input type="url" id="productLink" placeholder="https://example.com" required>
+                </div>
+                <button type="submit" class="submit-btn">Add Product</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Playlist Management Modal -->
+    <div id="playlistModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Manage Playlists</h2>
+            <div class="playlist-controls">
+                <input type="text" id="newPlaylistName" placeholder="New playlist name">
+                <button id="addPlaylistBtn" class="small-btn">Add Playlist</button>
+            </div>
+            <div class="playlist-list" id="playlistList">
+                <!-- Playlists will be listed here -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Product Display -->
+    <div class="container">
+        <div class="header-controls">
+            <h1>Our Products</h1>
+            <div class="controls">
+                <div class="search-box">
+                    <input type="text" id="searchInput" placeholder="Search products...">
+                    <i class="fas fa-search"></i>
+                </div>
+                <select id="playlistFilter">
+                    <option value="all">All Playlists</option>
+                    <!-- Playlist filters will be loaded here -->
+                </select>
+                <button id="managePlaylistsBtn" class="admin-only">Manage Playlists</button>
+            </div>
+        </div>
+        
+        <div class="products-grid" id="productsContainer">
+            <!-- Products will be loaded here -->
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
