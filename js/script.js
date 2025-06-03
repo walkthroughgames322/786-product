@@ -1,84 +1,186 @@
-const sheetID = "1gYBzv3UDQ2i1vSvsJcZJCxxmwxz409FpieLlEQ6ySKY";
-const sheetName = "Sheet1";
-const sheetURL = `https://docs.google.com/spreadsheets/d/${sheetID}/gviz/tq?tqx=out:csv&sheet=${sheetName}`;
+// Google Sheets URL (replace with your published sheet URL)
+const SHEET_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRGwweNAf5B5pnt3zjcUB3X2gaKjY6PAmh4SUXiQef_jiZ9cabx6senq_LEw7G36THrIbJVgj6JRbf4/pub?gid=0&single=true&output=csv';
 
+// DOM Elements
+const featuredPlaylistsEl = document.getElementById('featuredPlaylists');
+const allPlaylistsEl = document.getElementById('allPlaylists');
+const productsModal = document.getElementById('productsModal');
+const modalTitle = document.getElementById('modalTitle');
+const productsGrid = document.getElementById('productsGrid');
+const closeModal = document.querySelector('.close-modal');
+const globalSearch = document.getElementById('globalSearch');
+const searchBtn = document.getElementById('searchBtn');
+const modalSearch = document.getElementById('modalSearch');
+const modalSearchBtn = document.getElementById('modalSearchBtn');
+
+// Global Variables
 let allProducts = [];
+let currentPlaylist = '';
+let currentProducts = [];
 
-fetch(sheetURL)
-  .then(response => response.text())
-  .then(csvText => {
-    const rows = csvText.split("\n").slice(1);
-    const products = rows.map(row => {
-      const [name, image, link, tags] = row.split(",");
-      return { name, image, link, tags };
-    });
-
-    allProducts = products;
-    displayProducts(products);
-  });
-
-function displayProducts(products) {
-  const productList = document.getElementById("product-list");
-  productList.innerHTML = "";
-  products.forEach(product => {
-    if (!product.name || !product.link || !product.image) return;
-    const card = document.createElement("div");
-    card.className = "product-card";
-    card.innerHTML = `
-      <img src="${product.image}" alt="${product.name}">
-      <h3>${product.name}</h3>
-      <a href="${product.link}" target="_blank">Buy Now</a>
-    `;
-    productList.appendChild(card);
-  });
+// Fetch data from Google Sheets
+async function fetchData() {
+    try {
+        const response = await fetch(SHEET_URL);
+        const csvData = await response.text();
+        parseCSV(csvData);
+    } catch (error) {
+        console.error('Error fetching data:', error);
+        alert('Failed to load products. Please try again later.');
+    }
 }
 
-// Search filter
-document.getElementById("searchInput").addEventListener("input", function () {
-  const searchText = this.value.toLowerCase();
-  const filtered = allProducts.filter(product =>
-    product.name.toLowerCase().includes(searchText) ||
-    (product.tags && product.tags.toLowerCase().includes(searchText))
-  );
-  displayProducts(filtered);
+// Parse CSV data
+function parseCSV(csv) {
+    const lines = csv.split('\n');
+    const headers = lines[0].split(',').map(header => header.trim());
+    
+    allProducts = [];
+    
+    for (let i = 1; i < lines.length; i++) {
+        const values = lines[i].split(',');
+        if (values.length === headers.length) {
+            const product = {};
+            for (let j = 0; j < headers.length; j++) {
+                product[headers[j]] = values[j].trim();
+            }
+            allProducts.push(product);
+        }
+    }
+    
+    displayPlaylists();
+}
+
+// Display all playlists
+function displayPlaylists() {
+    featuredPlaylistsEl.innerHTML = '';
+    allPlaylistsEl.innerHTML = '';
+    
+    // Get unique playlists
+    const playlists = [...new Set(allProducts.map(product => product.Playlist))];
+    
+    // Create playlist cards
+    playlists.forEach(playlist => {
+        const playlistProducts = allProducts.filter(product => product.Playlist === playlist);
+        const playlistCard = createPlaylistCard(playlist, playlistProducts.length);
+        
+        // Add to appropriate section
+        if (playlistProducts.some(product => product.Featured === 'TRUE')) {
+            featuredPlaylistsEl.appendChild(playlistCard.cloneNode(true));
+        }
+        allPlaylistsEl.appendChild(playlistCard);
+    });
+}
+
+// Create playlist card element
+function createPlaylistCard(playlistName, productCount) {
+    const card = document.createElement('div');
+    card.className = 'playlist-card';
+    
+    // Get first product image for playlist thumbnail
+    const playlistProducts = allProducts.filter(product => product.Playlist === playlistName);
+    const thumbnail = playlistProducts[0]?.ProductPhoto || 'default-image.jpg';
+    
+    card.innerHTML = `
+        <img src="${thumbnail}" alt="${playlistName}" class="playlist-image">
+        <div class="playlist-info">
+            <h3 class="playlist-name">${playlistName}</h3>
+            <p class="playlist-count">${productCount} products</p>
+        </div>
+    `;
+    
+    card.addEventListener('click', () => openProductsModal(playlistName));
+    return card;
+}
+
+// Open modal with products from a playlist
+function openProductsModal(playlistName) {
+    currentPlaylist = playlistName;
+    currentProducts = allProducts.filter(product => product.Playlist === playlistName);
+    
+    modalTitle.textContent = playlistName;
+    displayProducts(currentProducts);
+    productsModal.style.display = 'block';
+    document.body.style.overflow = 'hidden';
+}
+
+// Display products in modal
+function displayProducts(products) {
+    productsGrid.innerHTML = '';
+    
+    if (products.length === 0) {
+        productsGrid.innerHTML = '<p>No products found in this collection.</p>';
+        return;
+    }
+    
+    products.forEach(product => {
+        const productCard = document.createElement('div');
+        productCard.className = 'product-card';
+        
+        productCard.innerHTML = `
+            <img src="${product.ProductPhoto}" alt="${product.ProductName}" class="product-img">
+            <div class="product-details">
+                <h3 class="product-title">${product.ProductName}</h3>
+                <a href="${product.ProductLink}" class="product-link" target="_blank">View Product</a>
+            </div>
+        `;
+        
+        productsGrid.appendChild(productCard);
+    });
+}
+
+// Close modal
+function closeProductsModal() {
+    productsModal.style.display = 'none';
+    document.body.style.overflow = 'auto';
+    modalSearch.value = '';
+}
+
+// Search all products
+function searchAllProducts() {
+    const searchTerm = globalSearch.value.toLowerCase();
+    if (!searchTerm) return;
+    
+    const filteredProducts = allProducts.filter(product => 
+        product.ProductName.toLowerCase().includes(searchTerm) || 
+        product.Playlist.toLowerCase().includes(searchTerm));
+    
+    if (filteredProducts.length === 0) {
+        alert('No products found matching your search.');
+        return;
+    }
+    
+    modalTitle.textContent = `Search Results for "${searchTerm}"`;
+    currentProducts = filteredProducts;
+    displayProducts(filteredProducts);
+    productsModal.style.display = 'block';
+    document.body.style.overflow = 'hidden';
+}
+
+// Search within current playlist
+function searchInPlaylist() {
+    const searchTerm = modalSearch.value.toLowerCase();
+    const filteredProducts = currentProducts.filter(product => 
+        product.ProductName.toLowerCase().includes(searchTerm));
+    
+    displayProducts(filteredProducts.length > 0 ? filteredProducts : currentProducts);
+}
+
+// Event Listeners
+closeModal.addEventListener('click', closeProductsModal);
+window.addEventListener('click', (e) => {
+    if (e.target === productsModal) closeProductsModal();
 });
 
-// Navigation buttons
-const navHomeBtn = document.getElementById("nav-home");
-const navAboutBtn = document.getElementById("nav-about");
-const aboutSection = document.getElementById("about-section");
-const productList = document.getElementById("product-list");
-const searchInput = document.getElementById("searchInput");
-const playlistsSection = document.getElementById("playlists");
-
-navHomeBtn.addEventListener("click", () => {
-  navHomeBtn.classList.add("active");
-  navAboutBtn.classList.remove("active");
-  aboutSection.style.display = "none";
-  productList.style.display = "grid";
-  playlistsSection.style.display = "block";
-  searchInput.style.display = "block";
-  displayProducts(allProducts);
+searchBtn.addEventListener('click', searchAllProducts);
+globalSearch.addEventListener('keypress', (e) => {
+    if (e.key === 'Enter') searchAllProducts();
 });
 
-navAboutBtn.addEventListener("click", () => {
-  navAboutBtn.classList.add("active");
-  navHomeBtn.classList.remove("active");
-  aboutSection.style.display = "block";
-  productList.style.display = "none";
-  playlistsSection.style.display = "none";
-  searchInput.style.display = "none";
+modalSearchBtn.addEventListener('click', searchInPlaylist);
+modalSearch.addEventListener('keypress', (e) => {
+    if (e.key === 'Enter') searchInPlaylist();
 });
 
-// Playlist buttons to filter products by category
-const playlistButtons = document.querySelectorAll(".playlist-btn");
-
-playlistButtons.forEach(button => {
-  button.addEventListener("click", () => {
-    const category = button.getAttribute("data-category");
-    const filtered = allProducts.filter(product =>
-      product.tags && product.tags.toLowerCase().includes(category.toLowerCase())
-    );
-    displayProducts(filtered);
-  });
-});
+// Initialize
+fetchData();
